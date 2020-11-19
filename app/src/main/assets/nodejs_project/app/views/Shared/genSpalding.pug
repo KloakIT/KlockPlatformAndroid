@@ -1,0 +1,78 @@
+#genSpalding
+	<!-- ko with: appScript -->
+		//- i.chevron.left.icon.spaldingHomeButton(data-bind="click: () => {backToMain()}")
+		.spaldingBackgroundImage()
+		.spaldingPageContent
+			section.spaldingHomeSection#spaldingHome
+				.spaldingBackButtonContainer(style="display: flex; align-items: center;")
+					.spaldingBackButton(data-bind="click: () => {backToMain()}")
+						i.chevron.left.icon(style="margin: 0 !important; height: 1.18em")
+						p()="Back to Kloak"
+				.spaldingHeaderBar
+					.spaldingHeaderLogo
+						img.spaldingHeaderLogoImage(src="./images/spalding/spalding_logo.png")
+					.spaldingHeaderNavigation
+						a(href="#spaldingHome").spaldingNavItem="HOME"
+						a(href="#spaldingAbout").spaldingNavItem="ABOUT"
+						a(href="#spaldingWatch").spaldingNavItem="WATCH"
+						a(href="#spaldingContact").spaldingNavItem="CONTACT"
+					.spaldingHeaderBuyBook
+				.spaldingHomeContent
+					p(style="font-size: 18px;")="GENERAL ROB SPALDING"
+					h1.spaldingHomeTitle(style="font-size: 5rem")="Take Back Our Country"
+					h1.spaldingHomeTitle(style="font-size: 5rem")="and Defend Our People..."
+					h3.spaldingHomeSubtitle="Insight and Advice for America's Future"
+					.spaldingHomeButtons
+						button.spaldingHomeCTAButton="WATCH OUR VIDEO"
+						button.spaldingHomeCTAButton(style="margin-left: 25px; background-color: #A6181B")="FREE CHAPTER"
+				.spaldingHomeOffer
+					.spaldingColumn(style="flex: 1;")
+						h3(style="font-weight: 300; font-size: 2.5rem; line-height: 3.5rem; padding-left: 3rem") GET THE FIRST
+							br
+							| CHAPTER OF STEALTH
+							br
+							| WAR
+							span(style="color: #A6181B")=' FREE'
+					.spaldingColumn(style="flex: 1.2;")
+						.spaldingHomeOfferInputs(style="display: flex; margin-bottom: 20px;")
+							input.spaldingHomeOfferInput(type="text" placeholder="FIRST NAME")
+							input.spaldingHomeOfferInput(type="text" style="margin-left: 20px;" placeholder="EMAIL *")
+						button.spaldingHomeOfferSubmit="SEND ME THE FREE CHAPTER"
+			section.spaldingAboutSection#spaldingAbout(style="padding: 10rem 0;")
+				.spaldingColumn(style="flex: 1; display: flex; justify-content: center")
+					img.spaldingImage(src="./images/spalding/spalding.png")
+				.spaldingColumn(style="flex: 1; color: white; padding: 0 10% 0 5%;")
+					h2(style="font-size: 2.75rem; letter-spacing: 5px")="ABOUT"
+					p(style="font-size: 1.5rem; font-weight: bold")="GENERAL SPALDING"
+					p(style="font-size: 1.3rem;") General Spalding has served in senior positions of strategy and diplomacy within the Defense and State Departments for more than 26 years, retiring as a brigadier general.
+						br
+						|He was the chief architect for the Trump Administration’s widely praised National Security Strategy (NSS), and the Senior Director for Strategy to the President at the National Security Council.
+					p(style="font-size: 1.3rem; letter-spacing: 5px")="NOTE FROM THE GENERAL"
+					p(style="font-size: 1.3rem;") "I am a national security expert and patriot entrepreneur identifying threats to our security, economy, and way of life. I am committed to bringing jobs back to the USA by restoring American manufacturing and securing our most critical resource...data."
+					p(style="font-size: 1.3rem; font-style: italic")="General Spalding"
+			section.spaldingSocialMedia#spaldingSocialMedia(style="background-color: black; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10rem 0")
+				h2.spaldingSocialMediaTitle(style="font-size: 4.5rem; font-weight: 700; color: white;")="SOCIAL MEDIA"
+				.spaldingTwitterContainer(style="max-width: 800px; width: 100%")
+					<!-- ko if: showTwitterObjResult() -->
+						.twitterTimeObj(style="background-color: ghostwhite; padding: 0 20px; flex: 1; overflow: auto; height: 30rem; max-height: 30rem; width: 100%; margin-top: 1rem" data-bind = "template: { name: 'twitterAccountObj', data: twitterObj }")
+						<!-- /ko -->
+						<!-- ko if: !showTwitterObjResult() -->
+						.ui.segment(style="height: 30rem !important; width: 100% !important; margin-top: 1rem !important;")
+							.ui.active.dimmer
+								.ui.text.loader='Fetching Twitter...'
+							p
+					<!-- /ko -->
+			section.spaldingWatchSection#spaldingWatch(style="background-color: rgb(20, 20, 20); display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 10rem 0")
+				h2.spaldingWatchTitle(style="font-size: 4.5rem; font-weight: 700; color: white;")="APPEARANCES"
+				.spaldingVideoCollection(data-bind="foreach: {data: videoShowMore() ? videoList : videoList.slice(0,6), as: 'video'}")
+					.spaldingVideoItem(data-bind="click: () => { $parent.playVideo(video) }, clickBubble: false" style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; cursor: pointer;")
+						img(data-bind="attr: {src: `./images/spalding/videoThumbnails/${video.image}`}" style="width: 100%; height: 100%")
+						i.play.circle.outline.icon(style="color: rgba(150, 150, 150, 0.75); margin: auto !important; font-size: 40px; position: absolute; top: 0; bottom: 0; left: 0; right: 0;")
+						<!-- ko if: $parent.selectedVideo() === video.url -->
+						<!-- ko template: { name: 'kloakVideoPlayer', data: $parent.videoPlayer}  --><!-- /ko -->
+						<!-- /ko -->
+				button.spaldingVideoShowMore(data-bind="text: videoShowMore() ? 'HIDE VIDEOS' : 'SHOW MORE', click: () => {videoShowMore(!videoShowMore())}, clickBubble: false" style="background-color: #A6181B")
+			section.spaldingFooter(style="display: flex; justify-content: center; align-items: center; height: 6rem; color: white; background-color: black")
+				.spaldingFooterBottom
+					p="Hosted on Kloak Platform © 2020 All Rights Reserved | General Spalding"
+	<!-- /ko -->

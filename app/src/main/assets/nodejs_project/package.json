@@ -1,0 +1,72 @@
+{
+	"name": "kloak_platform",
+	"version": "0.1.218",
+	"license": "MIT",
+	"description": "Kloak platform",
+	"scripts": {},
+	"build": {
+		"appId": "com.Kloak.Platform",
+		"win": {
+			"target": [
+				{
+					"target": "nsis"
+				},
+				{
+					"target": "squirrel"
+				}
+			],
+			"icon": "build/icon.ico"
+		},
+		"mac": {
+			"category": "public.app-category.utilities",
+			"icon": "build/icon"
+		},
+		"dmg": {
+			"backgroundColor": "#ffffff",
+			"contents": [
+				{
+					"x": 110,
+					"y": 220
+				},
+				{
+					"x": 420,
+					"y": 220,
+					"type": "link",
+					"path": "/Applications"
+				}
+			]
+		},
+		"linux": {
+			"target": [
+				"deb",
+				"pacman"
+			]
+		}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/KloakIT/Kloak_platform.git"
+	},
+	"author": {
+		"name": "Kloak Information Technologies Inc.",
+		"email": "info@kloak.app"
+	},
+	"bugs": {
+		"url": "https://github.com/KloakIT/Kloak_platform/issues"
+	},
+	"homepage": "https://www.kloak.app",
+	"dependencies": {
+		"async": "^3.2.0",
+		"core-js": "^3.7.0",
+		"express": "^4.17.1",
+		"mime-types": "^2.1.27",
+		"node-uuid": "^1.4.8",
+		"nodemailer": "^6.4.16",
+		"openpgp": "4.10.8",
+		"pug": "^3.0.0",
+		"socket.io": "^3.0.2"
+	},
+	"bin": {
+		"kloak_platform": "cli.js"
+	}
+}

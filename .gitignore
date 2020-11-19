@@ -13,3 +13,6 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+/app/src/main/assets/nodejs_project/node_modules
+/app/src/main/assets/nodejs_project/package-lock.json

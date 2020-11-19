@@ -1,0 +1,32 @@
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 80 80" style="enable-background:new 0 0 80 80;" xml:space="preserve">
+	<style type="text/css">
+		.st__0{fill:url(#SVG__11_ID_1_);}
+		.sstss1{fill-rule:evenodd;clip-rule:evenodd;fill:#FFFDFD;}
+		.sstss2{fill:#FFFFFF;}
+	</style>
+	<g>
+		<g>
+			<linearGradient id="SVG__11_ID_1_" gradientUnits="userSpaceOnUse" x1="-1.8575" y1="64.1664" x2="82.196" y2="15.6381">
+				<stop  offset="1.299629e-02" style="stop-color:#94FFFF"/>
+				<stop  offset="1" style="stop-color:#E5FFFF"/>
+			</linearGradient>
+			<path class="st__0" d="M68.5,77.5h-57c-5,0-9-4-9-9v-57c0-5,4-9,9-9h57c5,0,9,4,9,9v57C77.5,73.5,73.5,77.5,68.5,77.5z" filter = "url(#cosearch_Filter3)"/>
+		</g>
+		<g filter = "url(#cosearch_Filter3)">
+			<polygon class="sstss1" points="21.7,28.4 19.6,13.9 21.4,13.6 32.6,40.2 32.4,45.3 		"/>
+			<polygon class="sstss1" points="15.7,24.9 17.5,23.7 32.9,48.9 33.1,54 19.9,38.9 		"/>
+			<polygon class="sstss1" points="14.4,37.7 15.8,36.4 34.2,58 34.8,62.6 20.7,50.8 		"/>
+			<polygon class="sstss1" points="16.6,51.5 17.7,49.8 36.2,65.5 37,70.4 24.6,63.2 		"/>
+			<polygon class="sstss1" points="58.3,28.4 60.4,13.9 58.6,13.6 47.4,40.2 47.6,45.3 		"/>
+			<polygon class="sstss1" points="64.3,24.9 62.5,23.7 47.1,48.9 46.9,54 60.1,38.9 		"/>
+			<polygon class="sstss1" points="65.6,37.7 64.2,36.4 45.8,58 45.2,62.6 59.3,50.8 		"/>
+			<polygon class="sstss1" points="63.4,51.5 62.3,49.8 43.8,65.5 43,70.4 55.4,63.2 		"/>
+			<path class="sstss2" d="M49.9,26h-8.3c1.4-5.8,0.1-11.8-0.2-12.9c0.1-0.1,0.2-0.1,0.2-0.2c0.5-0.5,0.7-1.1,0.7-1.8
+				c0-0.7-0.3-1.3-0.7-1.8c-0.5-0.5-1.1-0.7-1.8-0.7s-1.3,0.3-1.8,0.7c-0.5,0.5-0.7,1.1-0.7,1.8c0,0.8,0.4,1.6,1,2
+				c-0.3,1.1-1.6,7.1-0.2,12.9H30c0,1.2-0.5,2.2-1.2,2.9c1.9-0.5,3.8-0.7,5.8-0.7c0.8,0,1.6,0,2.4,0.1l3,47.8l2.7-47.9
+				c0.8-0.1,1.5-0.1,2.3-0.1c2.1,0,4.1,0.3,5.9,0.8C50.4,28.2,49.9,27.2,49.9,26z M39.9,65.7l-0.4-37.1c0.1,0,0.2,0,0.3,0.1
+				c0.2,0,0.3-0.1,0.5-0.1L39.9,65.7z"/>
+		</g>
+	</g>
+</svg>

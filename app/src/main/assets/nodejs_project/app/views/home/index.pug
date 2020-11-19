@@ -1,0 +1,445 @@
+extends ../Shared/coreLayout.pug
+block jumbotron
+	include ../Shared/CoNETConnectInfo
+block jumbotron1
+
+	<!-- ko if: displayMedia() -->
+		.displayMediaOverlay(data-bind="style: {'opacity': displayMedia() ? '1' : '0', 'display': displayMedia() ? 'flex' : 'none', 'z-index': displayMedia() ? 9999 : -100}" style="flex-direction: column; position: absolute; justify-content: center; align-items: center; background-color: rgba(0,0,0,0.75); height: 100%; width: 100%")
+			img.imageViewer#imageViewer(data-bind="style: {'display': displayMedia() === 'image' ? 'initial' : 'none'}" style="width: 90%")
+			iframe#pdfViewer(data-bind="style: {'display': displayMedia() === 'pdf' ? 'initial' : 'none'}" width="90%" height="90%")
+			p.closeVideoOverlay( data-bind = "click: () => { displayMedia( null )}")="Close"
+	<!-- /ko -->
+	
+	<!-- ko if: showLanguageSelect -->
+		.language( style="z-index: 999;top: 0.9rem;right: 2rem;position: fixed; width: 2rem;")
+			.ui.text.shape.languageText( data-bind = " click: selectItem, clickBubble: false " )
+				.sides
+					span.ui.header.side.en.languageItem.languageTextCoverColor
+						img( src="/images/uk.svg")
+						//-span.languageItemSpan( data-bind = " text: menu[ 'en' ][0].showName " )
+					span.ui.header.side.tw.languageItem.languageTextCoverColor
+						img( src="/images/taiwan.svg")
+						//-span.languageItemSpan( data-bind = " text: menu[ 'tw' ][0].showName " )
+					span.ui.header.side.zh.languageItem.languageTextCoverColor
+						img( src="/images/china.svg")
+						//-span.languageItemSpan( data-bind = " text: menu[ 'zh' ][0].showName " )
+					span.ui.header.side.ja.languageItem.languageTextCoverColor
+						img( src="/images/japan.svg")
+						//-span.languageItemSpan( data-bind = " text: menu[ 'ja' ][0].showName " )
+	<!-- /ko -->
+
+	<!-- ko if: sectionWelcome -->
+	section#welcome.content
+		<!-- ko if: welcomeTitle -->
+		.welcome-bg
+			.welcome( style="color: white;" )
+				.kloaklogo( style ="width: 14rem;")
+					include ./kloakLogo.svg
+				
+				.textBox( style = "height: 3rem; margin-top: 1rem;")
+					
+					H1.shadowText2( data-bind = " animationTextIn: infoDefine [ languageIndex() ].cover.firstTitle2, css: { shadowText1: titleAnimationStep () === 1, shadowText2: titleAnimationStep () === 0 }" style = "padding-right:1em;padding-left:1em;" )
+		<!-- /ko -->
+
+		<!-- ko if: showStartupVideo -->
+		.startupView( style = " width:100%; height:100% ")
+			video.videoBackground( preload = "yes" playsinline autoplay muted loop )
+				source( src="/images/startup_background.mp4" type="video/mp4")
+		<!-- /ko -->
+	<!-- /ko -->
+
+	<!-- ko if: showMainPage -->
+		#showMainPage( style = "margin-top: 5rem;")
+			.ui.top.top.banner.ad.mainAD( style="height: auto!important;")
+				.title( style = "position: relative; -ms-flex-align: center; align-items: center;  z-index: 111; margin: 2rem;")
+					h2.ui.header( data-bind="animationTextLineIn: infoDefine [ languageIndex() ].cover.firstTitle1" style = "color: white; text-align: center;" )
+					h3.sub.header( data-bind="animationTextLineIn: infoDefine [ languageIndex() ].cover.firstTitle3" style = "color: white; text-align: center;" )
+			.AppList.CoContent.content
+				.searchItems( style = "padding-bottom: 10rem;" )
+								
+					.content( style = "padding: 0.5rem; " )
+						<!-- ko if: showLocalServerDisconnect() -->
+							.ui.buttons
+								button.ui.button.kloak_background_lightGrey( data-bind = "click: () => { showLocalServerDisconnect ( false );}, text: infoDefine [ languageIndex() ].home_index_view.cancel ")
+								.or
+								button.ui.positive.button.kloak_background_DarkBlue( data-bind = "click: connectLocalServer, text: infoDefine [ languageIndex() ].airplaneMode" )
+						<!-- /ko -->
+						<!-- ko if: !showLocalServerDisconnect() -->
+							<!-- ko if: localServerConnected() -->
+								a.ui.labeled.button( style = "margin: 1rem; margin-left: 0;" tabindex="0" )
+									.ui.vk.button( data-bind = "click: () => { showLocalServerDisconnect ( true )}" )
+										i.icon.home
+										<!-- ko text: LocalServerUrl --><!-- /ko -->
+
+									<!-- ko if: imapData -->
+										.ui.label.basic.left.pointing( data-bind = " click: connectLocalServer, css: { 'kloak_color_DarkBlue': networkConnect() !== 1, 'red': networkConnect() === 1 }")
+											<!-- ko text: imapData().imapUserName --><!-- /ko -->
+											
+											<!-- ko if: !networkConnect() -->
+												.detail( data-bind = "text: networkSetupConnectShow[ $root.languageIndex() ], click: connectToNode " )
+											<!-- /ko -->
+
+											<!-- ko if: networkConnect() === 2 -->
+											.ui.active.inverted.dimmer
+												.ui.mini.loader
+											<!-- /ko -->
+										
+											<!-- ko if: networkConnect() === 1 -->
+												i.icon.sync.alternate( style = "margin-left: 0.5rem; margin-right: 0;")
+											<!-- /ko -->
+
+											<!-- ko if: networkConnect() === true -->
+											<!-- /ko -->
+
+									<!-- /ko -->
+								
+							<!-- /ko -->
+							<!-- ko if: !localServerConnected() -->
+								button.circular.ui.icon.button.kloak_background_BrightBlue.kloak_color_lightGrey( data-bind = " click: connectLocalServer" )
+									i.icon.plane
+							<!-- /ko -->
+						<!-- /ko -->
+					.ui.divider
+					//-.ui.items.unstackable.divided
+					.ui.four.cards
+						<!-- ko foreach: mainManuItems -->
+						//-.ui.middle.aligned.item
+						.card( style = "background-color: rgba(0,0,0,0);box-shadow: none;")
+							a( href = "#" data-bind = " click: () => { if ( online && $root.networkConnect() === true || !online ) { $root.appClick ( $index());} }" )
+								.svg( data-bind = "html: img ")
+								<!-- ko if: notice() > 0 -->
+									.floating.ui.red.circular.label( data-bind = "text: notice()" style = "font-size: large;")
+								<!-- /ko -->
+							.content( style="border-top: none;padding-top: 0;")
+								.header( data-bind = "text: header[ $root.languageIndex() ]" style="color:white;")
+							//-.content( style = "padding: 0.5rem; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);")
+								a.header( href = "#" data-bind=" text: header [ $root.languageIndex() ], click: () => { if ( online && $root.networkConnect() === true || !online ) { $root.appClick ( $index());} }" style = " color: white;")
+								.meta
+									span
+								//-.description( style = "color: white")
+									p( data-bind = "text: description [ $root.languageIndex() ]")
+								<!-- ko if: extra -->
+								.extra
+									.ui.blue.label( data-bind = "text: extra.text[ $root.languageIndex() ], click: extra.action " )
+								<!-- /ko -->
+						<!-- /ko -->				
+	<!-- /ko -->
+
+	<!-- ko if: CanadaBackground -->
+	section#CanadaBackground( style = "top: 0rem; position: absolute;width: 100%;")
+		include coSearchImage.html
+	<!-- /ko -->
+
+	
+
+	<!-- ko if: sectionLogin() -->
+		.CoContent.content( data-bind = "style: { 'margin-top': middleY() / 1.8 }")
+			.ui.cards.loginCards
+				<!-- ko if: keyPair  -->
+				<!-- ko with: keyPair -->
+				<!-- ko if: $root.showKeyPair() -->
+				
+				.card.centered.raised( style = " width: 100%;" )
+					
+					<!-- ko with: keyPairPassword -->
+					
+						form.ui.form( data-bind=" submit: keyPair_checkPemPasswordClick" )
+							<!-- ko if: !showConform () -->
+							.field( data-bind = " css: { error: showPasswordErrorMessage(), disabled: passwordChecking()}")
+								//-p( data-bind = " text: infoDefine [ $root.languageIndex() ].Home_keyPairInfo_view.locked")
+								.ui.left.icon.input.big( data-bind=" css: { action: systemSetup_systemPassword().length > 4 && ! passwordChecking()}" )
+									<!-- ko if: systemSetup_systemPassword().length < 5 -->
+									i.icon.close.link.circular( data-bind = "click: reFresh" style = " color: #4285f4!important; " )
+									<!-- /ko -->
+									input.backgroundTransparent( data-bind = "attr: { placeholder: infoDefine[ $root.languageIndex() ].Home_keyPairInfo_view.locked, 'data-content': showPasswordErrorMessage () ? infoDefine[ $root.languageIndex() ].error_message.SystemPasswordError : null }, css: { 'activating element inline': showPasswordErrorMessage() }, textInput: systemSetup_systemPassword, hasFocus: inputFocus", type="password" value="" tabindex = "0" data-variation="very wide")
+									<!-- ko if: systemSetup_systemPassword().length < 5 -->
+									i.icon.trash.alternate.link.circular.red( data-bind = "click: function () { showConform ( true )}" style = "left: auto; right: 1rem;")
+									<!-- /ko -->
+									button.ui.icon.button.positive( data-bind = "visible: systemSetup_systemPassword().length > 4 && ! passwordChecking ()" type="submit" )
+										i.icon.angle.right
+							<!-- /ko -->
+							<!-- ko if: showConform -->
+							.field( style = "padding: 1rem;")
+								p( data-bind = " text : infoDefine[ $root.languageIndex() ].Home_keyPairInfo_view.deleteKeyPairInfo " style="color: brown;")
+								.ui.buttons
+									.ui.button( data-bind = " text: infoDefine[ $root.languageIndex() ].home_index_view.cancel, click: function () { return showConform ( false );}")
+									.or
+									.ui.negative.button( data-bind = " text: infoDefine[ $root.languageIndex() ].Home_keyPairInfo_view.delete, click: deleteKeypair ")
+							<!-- /ko -->
+								
+					<!-- /ko -->
+				<!-- /ko -->
+				//-	if: $root.showKeyPair
+				<!-- /ko -->
+				//-	with: keyPair
+				<!-- /ko -->
+				//- if: keyPair
+				
+				<!-- ko if: keyPairGenerateForm -->
+				<!-- ko with: keyPairGenerateForm -->
+				.card.centered.raised( data-bind = "if: showKeyPairForm, visible: showKeyPairForm" style = "width: 100%;padding: 2em;")
+					.keyPairGenerateForm
+						
+						form.ui.form( data-bind = "submit: form_AdministratorEmail_submit")
+							.hideInput( style="position: absolute;")
+								input#imageInput1( onchange = "_view.keyPairGenerateForm().imageInput ( this )" type = "file" accept = 'image/gif,image/jpeg,image/jpg,image/png' style="opacity:0;width: 0px;height: 0px;" )
+							.field
+								H3.ui.header.title.blue( data-bind = "animationTextIn: infoDefine [ $root.languageIndex() ].home_index_view.inputEmail" style = "color: rgba(30, 123, 200,0.9)")
+							.field.required( data-bind = " css: { error: passwordError ()}")
+								.ui.input.focus.left.icon.big
+									i.icon.privacy
+									input( type = "password" z-index = "1" data-bind = "hasFocus: true, value: systemSetup_systemPassword, attr: { placeholder: infoDefine[ $root.languageIndex() ].Home_keyPairInfo_view.password, 'data-content' : passwordError() ? infoDefine[ $root.languageIndex() ].error_message.PasswordLengthError : null }, css: { 'activating element inline': passwordError() }" )
+							.ui.horizontal.divider.blue( data-bind = "text: infoDefine [ $root.languageIndex() ].home_index_view.dividertext" style="color:#175c678f;")
+							.field
+								.ui.card( data-bind = " click: endEdit " style = "width: 100%;")
+									.content
+										.center.aligned.header
+											
+											<!-- ko ifnot: SystemAdministratorNickNameEdit -->
+												span( data-bind = "click:  SystemAdministratorNickNameEditClick, clickBubble: false, text: SystemAdministratorNickName() ? SystemAdministratorNickName() : infoDefine [ $root.languageIndex() ].home_index_view.SystemAdministratorNickName ")
+											<!-- /ko -->
+											<!-- ko if: SystemAdministratorNickNameEdit -->
+												.ui.input.focus.left.icon( data-bind = "click: inputClick, clickBubble: false")
+													i.icon.student
+													input( type = "text", z-index = "3", data-bind = " value : SystemAdministratorNickName, attr: { 'data-content' : NickNameError() ? infoDefine[ $root.languageIndex() ].error_message.required : null , placeholder: infoDefine [ $root.languageIndex() ].home_index_view.SystemAdministratorNickName }, css: { 'activating element inline': NickNameError() }" )
+											<!-- /ko -->
+										.center.aligned.description
+											<!-- ko ifnot: SystemAdministratorEmailAddressEdit -->
+												<!-- ko if: EmailAddressError -->
+													span
+														i.icon.red.exclamation.triangle
+												<!-- /ko -->
+												span( data-bind = "click: SystemAdministratorEmailAddressEditClick, clickBubble: false, text: SystemAdministratorEmailAddress() ? SystemAdministratorEmailAddress() : infoDefine [ $root.languageIndex() ].home_index_view.emailAddress, css: { 'red': EmailAddressError()} ")
+											<!-- /ko -->
+											<!-- ko if: SystemAdministratorEmailAddressEdit -->
+												.ui.input.focus.left.icon
+													i.icon.spy
+													input( type = "email", z-index = "2", data-bind = "click: inputClick, clickBubble: false, value : SystemAdministratorEmailAddress, attr: { placeholder: infoDefine [ $root.languageIndex() ].home_index_view.emailAddress, 'data-content' : EmailAddressError() ? infoDefine[ $root.languageIndex() ].error_message.EmailAddress[0] : null }, css: { 'activating element inline': EmailAddressError() }" )
+											<!-- /ko -->
+										.center.aligned.description( data-bind = "click: bioEditClick, clickBubble: false ")
+											<!-- ko ifnot: bioEdit -->
+												textarea( data-bind = "  value : bio, attr: {  placeholder: boiPlaceholder [ $root.languageIndex() ]} " rows = "3" readOnly disabled style = " width: 100%; resize: none; padding: 0.5rem; overflow: hidden; color: grey; border: none;text-align-last: center;" )
+											<!-- /ko -->
+											<!-- ko if: bioEdit -->
+												textarea( data-bind = " click: inputClick, clickBubble: false, value : bio, attr: {  placeholder: boiPlaceholder [ $root.languageIndex() ]} " rows = "3" style = " width: 100%; resize: none; padding: 0.5rem; overflow: hidden; color: grey;text-align-last: center;" )
+											<!-- /ko -->
+									.extra.content
+										.center.aligned.author
+											
+											<!-- ko if: avatarImage -->
+												img.ui.circular.tiny.image( data-bind = " attr: { src: avatarImage()}, click: function (){ document.getElementById('imageInput1').click() } ")
+												
+											<!-- /ko -->
+											<!-- ko ifnot: avatarImage -->
+												button.circular.ui.icon.button( data-bind = "click: function (){ document.getElementById('imageInput1').click() }, clickBubble: false ")
+													i.icon.user.plus
+											<!-- /ko -->
+							
+							//-.template
+								.field( data-bind = "css: { error: EmailAddressError() }" )
+									.ui.input.focus.left.icon.big
+										i.icon.spy
+										input( type = "email", z-index = "2", data-bind = "value : SystemAdministratorEmailAddress, attr: { placeholder: infoDefine [ $root.languageIndex() ].home_index_view.emailAddress, 'data-content' : EmailAddressError() ? infoDefine[ $root.languageIndex() ].error_message.EmailAddress[0] : null }, css: { 'activating element inline': EmailAddressError() }" )
+									.ui.info.message( data-bind = " visible: showInsideFireWallEmail()" )
+										i.icon.close( data-bind=" click: function () { showInsideFireWallEmail(false);}")
+										span.errorInformationText( data-bind = " text: infoDefine [ $root.languageIndex() ].home_index_view.accountEmailInfo ")
+								
+								.field( data-bind = " css: { error: NickNameError ()}")
+									.ui.input.focus.left.icon.big
+										i.icon.student
+										input( type = "text", z-index = "3", data-bind = " value : SystemAdministratorNickName, attr: { 'data-content' : NickNameError() ? infoDefine[ $root.languageIndex() ].error_message.required : null , placeholder: infoDefine [ $root.languageIndex() ].home_index_view.SystemAdministratorNickName }, css: { 'activating element inline': NickNameError() }" )
+								.field( data-bind = "" )
+									textarea( data-bind = " value : bio, attr: {  placeholder: boiPlaceholder [ $root.languageIndex() ]} " rows = "3" )
+							
+							button.ui.green.basic.large.button( type = "submit" data-bind = " text: infoDefine [ $root.languageIndex() ].home_index_view.creatKeyPair, click: form_AdministratorEmail_submit ")
+				.card.centered.raised( data-bind = "if: showKeyPairPorcess, visible: showKeyPairPorcess" style = "width: 100%;padding: 2em;")
+					.detail
+						p( data-bind = " html: infoDefine [ $root.languageIndex() ].home_index_view.GenerateKeypair ")
+						.keyPairProcessBar.ui.bottom.teal.attached.progress( style="margin-bottom: 1em;" data-value="1" data-total="100")
+							.bar
+				.card.centered.raised( data-bind = "if: keyPairGenerateFormMessage, visible: keyPairGenerateFormMessage " style = "width: 100%;padding: 2em;")
+					.detail
+						p( data-bind="visible: message_cancel(), text: infoDefine [ $root.languageIndex() ].home_index_view.keyPairCancel ")
+						p( data-bind="visible: message_keyPairGenerateError, text: infoDefine [ $root.languageIndex() ].home_index_view.keyPairGenerateError ")
+						p( data-bind = "visible: message_keyPairGenerateSuccess, text: infoDefine [ $root.languageIndex() ].home_index_view.keyPairGenerateSuccess ")
+						button.ui.negative.basic.button( data-bind= " click: CloseKeyPairGenerateFormMessage, text: infoDefine [ $root.languageIndex() ].error_message.Success")
+				<!-- /ko -->
+				//-	if: keyPairGenerateForm
+				<!-- /ko -->
+				//- with: keyPairGenerateForm
+
+	<!-- /ko -->
+
+	<!-- ko if: sectionAgreement -->
+	section#agreement.content
+		.content.firstNodeContent
+			.ui.header( data-bind = " text: infoDefine[ languageIndex() ].firstNote.title " style = " margin-left: 30px; margin-right: 100px;")
+			.ui.divider
+			.detailSegment
+				.ui.attached.segment
+					span( data-bind = " html: infoDefine[ languageIndex() ].firstNote.firstPart " style = "font-weight: bold;")
+			.detailSegment( data-bind = " foreach: infoDefine[ languageIndex() ].firstNote.detail ")
+				.ui.top.attached.header( data-bind = " visible: header && header.length " )
+					h4( data-bind = " text: header ")
+				.ui.attached.segment
+					span( data-bind = " html: detail ")
+			.agreementButtom
+				.ui.buttons.nextButtom
+					buttom.ui.button( data-bind = " text: infoDefine[ languageIndex() ].firstNote.disagree, click: function () { sectionAgreement(false); return sectionWelcome(true)} ")
+					.or
+					buttom.ui.positive.button( data-bind = " text: infoDefine[ languageIndex() ].home_index_view.agree, click: agreeClick ")
+	<!-- /ko -->
+
+	<!-- ko if: imapSetup -->
+		<!-- ko with: imapSetup -->
+			.ui.cards.loginCards( style = "margin-top: -10rem!important;" )
+				.card.centered.raised( style = " width: 100%;" )
+					<!-- ko if: showForm -->
+						
+						.content.imapSetupForm
+							<!-- ko if: checkImapError () > -1 -->
+								.ui.top.attached.segment.warning.message( style = "font-size: large;")
+									i.icon.exclamation.triangle.red
+									<!-- ko text: infoDefine [ $root.languageIndex() ].imapInformation.imapCheckError[ checkImapError() ] --><!-- /ko -->
+							<!-- /ko -->
+							.ui.segment.attached( data-bind = "css: { 'teal': checkImapError () < 0 }")
+								
+								p.kloak_color_PrimaryTeal( style = "font-size: large;" )
+									<!-- ko text: infoDefine [ $root.languageIndex() ].imapInformation.infomation --><!-- /ko -->
+									a.ui.label.teal.link.big( data-bind = " click: useCoNetTempAccount, text: infoDefine [ $root.languageIndex() ].imapInformation.coNetTempAccount ")
+									
+							form.ui.form.fluid( data-bind = "submit: imapAccountGoCheckClick " style = "padding-top: 1rem;" )
+								.two.fields
+									.field( data-bind = " css: { error: emailAddressShowError ()}")
+										.ui.left.icon.input.huge
+											i.icon.outline.mail
+											input( data-bind = " hasFocus: true, value : emailAddress, css:{ 'activating element inline': emailAddressShowError() }, attr: { tabindex: 1, placeholder: infoDefine [ $root.languageIndex() ].home_index_view.imapEmailAddress, 'data-content' : emailAddressShowError() ? infoDefine[ $root.languageIndex() ].error_message.EmailAddress[ EmailAddressErrorType() ]: null }" type = "text" z-index = "1" )
+									.field
+										.passwdInput.ui.input.huge( data-bind = " css: { 'left icon': !password() || !password().length, 'action': password() && password().length }")
+											i.icon.privacy( data-bind = " visible: !password() || !password().length ")
+											input( data-bind = " textInput: password, attr: { placeholder: infoDefine [ $root.languageIndex() ].imapInformation.emailServerPassword, tabindex: 2 }" type = "password"  z-index = "2" )
+											button.ui.icon.button.positive( data-bind = " visible: password() && password().length, click: imapAccountGoCheckClick" type = "submit" )
+												i.icon.angle.right
+					<!-- /ko -->
+					<!-- ko if: showCheckProcess -->
+						.content.loader
+							p.kloak_color_PrimaryTeal( data-bind = "text: infoDefine [ $root.languageIndex() ].imapInformation.imapCheckingStep[0] ")
+							.loaderCoNET
+								.loaderCoNET-div
+								.loaderCoNET-div
+								.loaderCoNET-div
+								.loaderCoNET-div
+
+					<!-- /ko -->
+		<!-- /ko -->
+	<!-- /ko -->
+
+	//-		AppList 
+	<!-- ko if:  AppList() && keyPair() && keyPair().verified -->
+	//-section.AppList.CoContent.content
+		
+		.CoGateCards( style="max-width: 60em;")
+			h2.ui.header.AppListHeader( data-bind="text: infoDefine[ languageIndex() ].thirdParty.information" style="color: white;")
+			
+			.ui.link.cards
+				
+				<!-- ko foreach: appList -->
+				.card.AppCardTop( data-bind = "click: function () { click( $root )}, visible: show")
+					.content.cardContentHeader
+						a.ui.orange.right.corner.label.comeSoon( data-bind = "visible: comeSoon, attr: { 'data-content': infoDefine[ $root.languageIndex() ].thirdParty.comesoon }")
+							i.icon.warning.sign
+						.header( data-bind = " text: infoDefine[ $root.languageIndex() ].thirdParty.app[ $index()], style: { color: titleColor }" style="font-size: 1em;")
+						.blurring.dimmable.image
+							.ui.dimmer
+								.content
+									p(data-bind="text: infoDefine[ $root.languageIndex() ].thirdParty.dimmer[$index()]")
+							.ui.AppCardImageArea
+								img.ui.centered.image.AppCardImage( data-bind = "attr: { src: image, style: css }")
+					//-.content
+						//-span.right.floated
+							i.heart.red.like.icon( data-bind="css: { outline: !liked()}")
+							span( data-bind = "text: likeCount()" style="color: #DB2828")
+						//-span.floated
+							i.comment.grey.icon.outline
+							span( data-bind="text: commentCount")
+				<!-- /ko -->
+	<!-- /ko -->
+
+	<!-- ko if: daggrHtml -->
+	section#daggrHtml
+		<!----------- start tempAppHtml DEBUG -------------->
+		
+		include ../Shared/daggr
+
+		<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko -->
+
+	<!-- ko if: muteHtml -->
+
+		section#muteHtml
+			<!----------- start tempAppHtml DEBUG -------------->
+			
+			include ../Shared/muteHtml
+
+			<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko -->
+
+	<!-- ko if: forTwitterHtml -->
+
+		section#forTwitterHtml
+			<!----------- start tempAppHtml DEBUG -------------->
+			
+			include ../Shared/forTwitterHtml
+
+			<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko -->
+
+	<!-- ko if: forYoutubeHtml -->
+
+	section#forYoutubeHtml
+		<!----------- start tempAppHtml DEBUG -------------->
+		
+		include ../Shared/forYoutubeHtml
+
+		<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko -->
+
+	<!-- ko if: showFileStorage -->
+	section#fileStorage
+		<!----------- start tempAppHtml DEBUG -------------->
+		
+		include ../Shared/fileStorage
+
+		<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko-->
+	
+	<!-- ko if: showGeneralSpalding -->
+	section#generalSpalding
+		<!----------- start tempAppHtml DEBUG -------------->
+		
+		include ../Shared/genSpalding
+
+		<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko-->
+
+	<!-- ko if: tempAppHtml -->
+	section#tempAppHtml
+		<!----------- start tempAppHtml DEBUG -------------->
+		
+		include ../Shared/appHtml
+
+		<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko -->
+
+	<!-- ko if: showCanada -->
+	section#canadaGovernment
+		<!----------- start tempAppHtml DEBUG -------------->
+		
+		include ../Shared/canada
+
+		<!----------- end tempAppHtml DEBUG ----------------->
+	<!-- /ko -->
+
+
+block jumbotron2
+	include ../Shared/templateScript.pug
